@@ -31,4 +31,4 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 > [!IMPORTANT]
-> This tool uses unofficial APIs to download VSIX packages and may stop working if Microsoft changes their marketplace infrastructure.
+> This tool uses unofficial APIs to download VSIX packages and may stop working anytime
