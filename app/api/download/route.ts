@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import https from 'https';
 
 function parseItemUrl(rawUrl: string) {
   try {
@@ -13,48 +12,41 @@ function parseItemUrl(rawUrl: string) {
   }
 }
 
-function fetchLatestVersion(publisher: string, name: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const data = JSON.stringify({
-      filters: [
-        {
-          criteria: [{ filterType: 7, value: `${publisher}.${name}` }],
-        },
-      ],
-      flags: 0x1 | 0x2 | 0x80 | 0x100,
-    });
+async function fetchLatestVersion(publisher: string, name: string): Promise<string> {
+  const data = JSON.stringify({
+    filters: [
+      {
+        criteria: [{ filterType: 7, value: `${publisher}.${name}` }],
+      },
+    ],
+    flags: 0x1 | 0x2 | 0x80 | 0x100,
+  });
 
-    const options = {
-      hostname: 'marketplace.visualstudio.com',
-      path: '/_apis/public/gallery/extensionquery',
+  const response = await fetch(
+    'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery',
+    {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json;api-version=3.0-preview.1',
-        'Content-Length': Buffer.byteLength(data),
       },
-    };
+      body: data,
+    },
+  );
 
-    const req = https.request(options, (res) => {
-      let body = '';
-      res.on('data', (chunk) => (body += chunk));
-      res.on('end', () => {
-        try {
-          const json = JSON.parse(body);
-          const extension = json.results[0]?.extensions[0];
-          const version = extension?.versions[0]?.version;
-          if (!version) return reject('Version not found');
-          resolve(version);
-        } catch {
-          reject('Failed to parse version response');
-        }
-      });
-    });
+  if (!response.ok) {
+    throw new Error('Failed to fetch extension info');
+  }
 
-    req.on('error', reject);
-    req.write(data);
-    req.end();
-  });
+  const json = await response.json();
+  const extension = json.results[0]?.extensions[0];
+  const version = extension?.versions[0]?.version;
+
+  if (!version) {
+    throw new Error('Version not found');
+  }
+
+  return version;
 }
 
 export async function GET(req: NextRequest) {
@@ -71,29 +63,26 @@ export async function GET(req: NextRequest) {
 
     const vsixUrl = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publisher}/vsextensions/${name}/${version}/vspackage`;
 
-    return new Promise<Response>((resolve) => {
-      https
-        .get(vsixUrl, (vsixRes) => {
-          if (vsixRes.statusCode !== 200) {
-            resolve(new Response('Failed to fetch .vsix file', { status: 502 }));
-            return;
-          }
+    // Fetch the .vsix file and buffer it completely
+    const response = await fetch(vsixUrl);
 
-          const headers = new Headers({
-            'Content-Type': 'application/octet-stream',
-            'Content-Disposition': `attachment; filename=${itemName}-${version}.vsix`,
-          });
+    if (!response.ok) {
+      return new Response('Failed to fetch .vsix file', { status: 502 });
+    }
 
-          resolve(
-            new Response(vsixRes as any, {
-              status: 200,
-              headers,
-            }),
-          );
-        })
-        .on('error', () => {
-          resolve(new Response('Error downloading .vsix', { status: 500 }));
-        });
+    // Get the complete file as an ArrayBuffer to ensure it's fully downloaded
+    const arrayBuffer = await response.arrayBuffer();
+
+    const headers = new Headers({
+      'Content-Type': 'application/octet-stream',
+      'Content-Disposition': `attachment; filename=${itemName}-${version}.vsix`,
+      'Content-Length': arrayBuffer.byteLength.toString(),
+    });
+
+    // Return the complete buffered file
+    return new Response(arrayBuffer, {
+      status: 200,
+      headers,
     });
   } catch (err: any) {
     return new Response(err.message ?? 'Unexpected error', { status: 400 });
