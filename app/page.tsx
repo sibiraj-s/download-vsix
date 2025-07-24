@@ -94,7 +94,7 @@ export default function Home() {
           </form>
         </Form>
         <div className="mt-10">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground/80 text-xs">
             note: unofficial API's are used to download the package and may stop
             working at any time.
           </p>
