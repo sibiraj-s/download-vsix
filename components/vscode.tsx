@@ -1,4 +1,4 @@
-import { SVGProps, Ref, forwardRef } from "react";
+import { SVGProps, Ref, forwardRef } from 'react';
 interface SVGRProps {
   title?: string;
   titleId?: string;
@@ -27,15 +27,7 @@ const VscodeIcon = ({
   >
     {desc ? <desc id={descId}>{desc}</desc> : null}
     {title ? <title id={titleId}>{title}</title> : null}
-    <mask
-      id="a"
-      width={100}
-      height={100}
-      x={0}
-      y={0}
-      mask-type="alpha"
-      maskUnits="userSpaceOnUse"
-    >
+    <mask id="a" width={100} height={100} x={0} y={0} mask-type="alpha" maskUnits="userSpaceOnUse">
       <path
         fill="#fff"
         fillRule="evenodd"
@@ -67,7 +59,7 @@ const VscodeIcon = ({
         clipRule="evenodd"
         opacity={0.25}
         style={{
-          mixBlendMode: "overlay",
+          mixBlendMode: 'overlay',
         }}
       />
     </g>
@@ -82,18 +74,11 @@ const VscodeIcon = ({
         filterUnits="userSpaceOnUse"
       >
         <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
+        <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
         <feOffset />
         <feGaussianBlur stdDeviation={4.167} />
         <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-        <feBlend
-          in2="BackgroundImageFix"
-          mode="overlay"
-          result="effect1_dropShadow"
-        />
+        <feBlend in2="BackgroundImageFix" mode="overlay" result="effect1_dropShadow" />
         <feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
       </filter>
       <filter
@@ -106,18 +91,11 @@ const VscodeIcon = ({
         filterUnits="userSpaceOnUse"
       >
         <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
+        <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
         <feOffset />
         <feGaussianBlur stdDeviation={4.167} />
         <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-        <feBlend
-          in2="BackgroundImageFix"
-          mode="overlay"
-          result="effect1_dropShadow"
-        />
+        <feBlend in2="BackgroundImageFix" mode="overlay" result="effect1_dropShadow" />
         <feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
       </filter>
       <linearGradient
