@@ -1,14 +1,6 @@
 # Download VSIX
 
-A simple web application to download VSIX packages directly from the Visual Studio Code Marketplace.
-
-## Features
-
-- Clean, minimal interface with VS Code branding
-- Direct VSIX package downloads from marketplace URLs
-- Form validation for proper marketplace URLs
-- Dark/light theme support
-- Built with modern React and Next.js
+A simple web application to download VSIX packages directly from the Visual Studio Code Marketplace. (Made for personal use since I didn't trust all extensions published on open-vsx yet)
 
 ## Usage
 
@@ -19,7 +11,7 @@ A simple web application to download VSIX packages directly from the Visual Stud
 
 ### Prerequisites
 
-- Node.js 22+ 
+- Node.js 22+
 - npm
 
 ### Installation
@@ -38,7 +30,5 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Important Note
-
-This tool uses unofficial APIs to download VSIX packages and may stop working if Microsoft changes their marketplace infrastructure.
-
+> [!IMPORTANT]
+> This tool uses unofficial APIs to download VSIX packages and may stop working if Microsoft changes their marketplace infrastructure.
